@@ -8,8 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -39,16 +42,37 @@ class CallbackTest {
 
     @Test
     void shouldTestValidFilling() {
-//        WebElement form = driver.findElement(By.cssSelector("[data-test-id=callback-form]"));
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79990000000");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
-        driver.findElement(By.className("button")).click();
+        driver.findElement(By.className("button__text")).click();
         String text = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText();
         assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.",
                 text.trim());
     }
+
+    @Test
+    void phoneNumberIsEmpty() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий  Петров");
+//        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79990000000");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        List<WebElement> elements = driver.findElements(By.className("input__sub"));
+        String text = elements.get(1).getText();
+        assertEquals("Поле обязательно для заполнения",
+                text.trim());
+    }
 }
+
+
+
+
+
+
+
+
+
+
 //    @Test
 //    void shouldTestV1() {
 //        driver.get("http://localhost:9999");
