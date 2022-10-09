@@ -86,6 +86,7 @@ class CallbackTest {
         assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.",
                 text.trim());
     }
+
     @Test
     void doubleName() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Кириллов-Андреев Иван");
@@ -109,7 +110,7 @@ class CallbackTest {
     }
 
     @Test
-    void phoneNumberHasTenSymbols() {
+    void phoneNumberHasElevenSymbols() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий Петров");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("89990000000");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
@@ -121,7 +122,7 @@ class CallbackTest {
     }
 
     @Test
-    void phoneNumberHasElevenSymbols() {
+    void phoneNumberHasThirteenSymbols() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий Петров");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+799912345678");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
@@ -131,28 +132,7 @@ class CallbackTest {
         assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
                 text.trim());
     }
-
-    @Test
-    void phoneNumberHasElevenSymbols() {
-        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий Петров");
-        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+799912345678");
-        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
-        driver.findElement(By.className("button__text")).click();
-        List<WebElement> elements = driver.findElements(By.className("input__sub"));
-        String text = elements.get(1).getText();
-        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
-                text.trim());
-    }
-
 }
-
-
-
-
-
-
-
-
 
 
 //    @Test
