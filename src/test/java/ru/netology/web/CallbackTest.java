@@ -41,7 +41,7 @@ class CallbackTest {
     }
 
     @Test
-    void shouldTestValidFilling() {
+    void withoutLastName() {
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79990000000");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
@@ -53,7 +53,7 @@ class CallbackTest {
 
     @Test
     void phoneNumberIsEmpty() {
-        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий  Петров");
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий Петров");
 //        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79990000000");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
         driver.findElement(By.className("button__text")).click();
@@ -62,6 +62,88 @@ class CallbackTest {
         assertEquals("Поле обязательно для заполнения",
                 text.trim());
     }
+
+    @Test
+    void nameIsEmpty() {
+//        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий Петров");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79990000000");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        List<WebElement> elements = driver.findElements(By.className("input__sub"));
+        String text = elements.get(0).getText();
+        assertEquals("Поле обязательно для заполнения",
+                text.trim());
+    }
+
+    @Test
+    void nameInLatinLetters() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Arsentiy Petrov");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79990000000");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        List<WebElement> elements = driver.findElements(By.className("input__sub"));
+        String text = elements.get(0).getText();
+        assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.",
+                text.trim());
+    }
+    @Test
+    void doubleName() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Кириллов-Андреев Иван");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79990000000");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText();
+        assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.",
+                text.trim());
+    }
+
+    @Test
+    void nameWithPatronymic() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Кириллов Андрей Иванович");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79990000000");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id=order-success]")).getText();
+        assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.",
+                text.trim());
+    }
+
+    @Test
+    void phoneNumberHasTenSymbols() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий Петров");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("89990000000");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        List<WebElement> elements = driver.findElements(By.className("input__sub"));
+        String text = elements.get(1).getText();
+        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
+                text.trim());
+    }
+
+    @Test
+    void phoneNumberHasElevenSymbols() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий Петров");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+799912345678");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        List<WebElement> elements = driver.findElements(By.className("input__sub"));
+        String text = elements.get(1).getText();
+        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
+                text.trim());
+    }
+
+    @Test
+    void phoneNumberHasElevenSymbols() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Арсентий Петров");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+799912345678");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.className("button__text")).click();
+        List<WebElement> elements = driver.findElements(By.className("input__sub"));
+        String text = elements.get(1).getText();
+        assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
+                text.trim());
+    }
+
 }
 
 
