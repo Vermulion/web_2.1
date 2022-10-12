@@ -12,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class CallbackTest {
     private WebDriver driver;
@@ -121,5 +122,13 @@ class CallbackTest {
         String text = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText();
         assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.",
                 text.trim());
+    }
+
+    @Test
+    void checkBoxIsEmpty() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Кириллов Андрей");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+79990000000");
+        driver.findElement(By.className("button__text")).click();
+        assertFalse(!driver.findElement(By.cssSelector("[data-test-id=agreement].input_invalid .checkbox__text")).isDisplayed());
     }
 }
